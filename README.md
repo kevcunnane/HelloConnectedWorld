@@ -1,0 +1,2 @@
+# helloconnectedworld README
+This is a sample extension for SQL Operations Studio. It shows how to add a command contribution to the command palette and Object Explorer context menu, and how to get server connection info for use in your application.
