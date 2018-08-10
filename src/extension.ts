@@ -12,15 +12,9 @@ import * as sqlops from 'sqlops';
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
-    let disposable = vscode.commands.registerCommand('extension.sayHello', async () => {
-        // use async call to get the connection info
-        let connection = await sqlops.connection.getCurrentConnection();
-        if (!connection) {
-            let allConnections = await sqlops.connection.getActiveConnections();
-            if (allConnections && allConnections.length > 0) {
-                connection = allConnections[0];
-            }
-        }
+    let disposable = vscode.commands.registerCommand('extension.sayHello', async (context?: sqlops.ObjectExplorerContext) => {
+        let connection = await getConnection(context);
+
         // Format the message
         let message = `Hello Connected World! Please connect in Object Explorer or a Query window`;
         if (connection) {
@@ -31,6 +25,23 @@ export function activate(context: vscode.ExtensionContext) {
     });
 
     context.subscriptions.push(disposable);
+}
+
+async function getConnection(context?: sqlops.ObjectExplorerContext): Promise<sqlops.ConnectionInfo> {
+    // If we are called from a context menu use the predefined connection.
+    // This even has correct database if the node clicked on is under a specific DB
+    if (context) {
+        return context.connectionProfile;
+    }
+    // Otherwise use APIs to find the global current connection / active connection
+    let connection = await sqlops.connection.getCurrentConnection();
+    if (!connection) {
+        let allConnections = await sqlops.connection.getActiveConnections();
+        if (allConnections && allConnections.length > 0) {
+            connection = allConnections[0];
+        }
+    }
+    return connection;
 }
 
 // this method is called when your extension is deactivated
