@@ -24,11 +24,12 @@
         ],
         "menus": {
             "objectExplorer/item/context": [
-            {
-                "command": "extension.sayHello",
-                "when": "connectionProvider == MSSQL  && !treeNode",
-                "group": "1mysection1"
-            }]
+                {
+                    "command": "extension.sayHello",
+                    "when": "connectionProvider == MSSQL  && !treeNode",
+                    "group": "1mysection1"
+                }
+            ]
         }
     },
     "scripts": {
